@@ -1,0 +1,387 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MysteryBox | Think Beyond</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Segoe UI,Arial,sans-serif;background:#0b0b18;color:#fff;min-height:100vh}
+button{font:inherit;cursor:pointer}
+.screen{display:none;min-height:100vh;padding:24px}
+.screen.active{display:flex}
+#home,#levels,#game,#result{align-items:center;justify-content:center;background:radial-gradient(ellipse at top,#30204f,transparent 55%),#0b0b18}
+.wrap{width:100%;max-width:780px;margin:auto}
+.center{text-align:center}
+.logo{font-size:54px;width:100px;height:100px;display:grid;place-items:center;margin:0 auto 25px;border-radius:28px;background:linear-gradient(135deg,#a678ff,#5943dd);box-shadow:0 0 45px #9670ff40}
+.tag{color:#bda6ff;font-size:12px;font-weight:bold;letter-spacing:4px;margin-bottom:16px}
+h1{font-size:clamp(42px,8vw,76px);letter-spacing:-2px}
+.grad{background:linear-gradient(90deg,#c5a7ff,#72e0ff);color:transparent;background-clip:text}
+p{color:#aaaabd;line-height:1.7}
+.subtitle{max-width:500px;margin:20px auto 30px}
+.btn{border:0;border-radius:13px;padding:15px 25px;background:linear-gradient(100deg,#9c70ff,#6845e8);color:white;font-weight:700;transition:.2s}
+.btn:hover{transform:translateY(-2px);filter:brightness(1.1)}
+.btn.full{width:100%}
+.features{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:35px}
+.feature,.pill{padding:10px 14px;border:1px solid #ffffff20;background:#ffffff08;border-radius:30px;color:#d8d1f4;font-size:12px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:35px}
+.brand{font-weight:800;letter-spacing:1px}.brand span{color:#b89aff}
+.back{background:#ffffff08;border:1px solid #ffffff25;color:white;padding:10px 13px;border-radius:10px}
+h2{font-size:clamp(28px,5vw,42px);margin-bottom:10px}
+.levels{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:28px 0}
+.level{background:#ffffff08;border:1px solid #ffffff20;border-radius:17px;padding:22px 16px;text-align:left;color:white}
+.level.selected{border:2px solid #b79aff;background:#9c70ff18}
+.level .ico{font-size:30px;margin-bottom:14px}.level h3{margin-bottom:8px}
+.level p{font-size:13px}.level small{display:block;color:#c7afff;margin-top:15px}
+.gamehead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.progress{height:6px;background:#ffffff16;border-radius:20px;overflow:hidden;margin-bottom:25px}
+#bar{height:100%;width:0;background:linear-gradient(90deg,#9c70ff,#72e0ff);transition:.3s}
+.card{padding:clamp(20px,5vw,35px);border:1px solid #ffffff20;border-radius:22px;background:linear-gradient(145deg,#1b1930,#11111f)}
+.qicon{font-size:30px;margin-bottom:18px}
+#question{font-size:clamp(21px,4vw,30px);line-height:1.45;margin:12px 0}
+#description{margin-bottom:23px}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.answer{background:#ffffff08;border:1px solid #ffffff22;color:#fff;text-align:left;padding:15px;border-radius:12px;line-height:1.5}
+.answer:hover:not(:disabled){border-color:#a98aff;background:#a98aff12}
+.answer.correct{border-color:#43d6a0;background:#43d6a018}
+.answer.wrong{border-color:#ff7d8b;background:#ff7d8b18}
+.answer:disabled{cursor:default}
+.hint{border:0;background:transparent;color:#c6adff;margin-top:18px;padding:8px 0}
+#hintText{display:none;color:#d7c9ff;margin-top:7px}
+#feedback{display:none;margin-top:17px;padding:16px;border-radius:12px;background:#ffffff08;border:1px solid #ffffff20;line-height:1.7}
+#next{display:none;margin-top:18px;width:100%}
+.scorebox{border:1px solid #ffffff20;background:#ffffff08;border-radius:18px;padding:25px;margin:25px 0}
+.score{font-size:52px;color:#c4a5ff;font-weight:800}
+.actions{display:flex;justify-content:center;flex-wrap:wrap;gap:10px}
+.secondary{background:#ffffff08;border:1px solid #ffffff25;color:white;border-radius:12px;padding:14px 18px}
+@media(max-width:580px){.levels{grid-template-columns:1fr}.level{padding:16px;display:grid;grid-template-columns:45px 1fr;column-gap:12px}.level .ico{grid-row:span 3;margin:0}.answers{grid-template-columns:1fr}.card{padding:20px 16px}}
+</style>
+</head>
+<body>
+
+<section id="home" class="screen active">
+ <div class="wrap center">
+  <div class="logo">🔐</div>
+  <div class="tag">THINK • DECODE • DISCOVER</div>
+  <h1>MYSTERY<span class="grad">BOX</span></h1>
+  <p class="subtitle">Not every answer is obvious. Read between the clues, challenge your logic, and unlock the mystery. Are you ready?</p>
+  <button class="btn" onclick="show('levels')">Start Playing →</button>
+  <div class="features"><span class="feature">🧩 150 Puzzles</span><span class="feature">💡 Smart Hints</span><span class="feature">🏆 Score Points</span></div>
+ </div>
+</section>
+
+<section id="levels" class="screen">
+ <div class="wrap">
+  <div class="top"><div class="brand">🔐 MYSTERY<span>BOX</span></div><button class="back" onclick="show('home')">← Home</button></div>
+  <div class="tag">CHOOSE YOUR CHALLENGE</div>
+  <h2>How sharp is your mind?</h2>
+  <p>Select a level. Each game contains 5 randomly selected questions from its 50-question bank.</p>
+  <div class="levels">
+   <button class="level selected" onclick="choose('Easy',this)"><div class="ico">🌱</div><h3>Easy</h3><p>Tricky everyday riddles and careful thinking.</p><small>50 questions · Warm-up</small></button>
+   <button class="level" onclick="choose('Medium',this)"><div class="ico">🧠</div><h3>Medium</h3><p>Logic, patterns and clever situations.</p><small>50 questions · Think twice</small></button>
+   <button class="level" onclick="choose('Hard',this)"><div class="ico">🔥</div><h3>Hard</h3><p>Brain teasers that need real reasoning.</p><small>50 questions · Expert mode</small></button>
+  </div>
+  <button class="btn full" onclick="startGame()">Start Mystery →</button>
+ </div>
+</section>
+
+<section id="game" class="screen">
+ <div class="wrap">
+  <div class="top"><div class="brand">🔐 MYSTERY<span>BOX</span></div><button class="back" onclick="show('levels')">✕ Exit</button></div>
+  <div class="gamehead"><span class="pill" id="levelTag">🌱 EASY</span><span class="pill" id="count">QUESTION 1 / 5</span><span class="pill" id="points">⭐ 0 POINTS</span></div>
+  <div class="progress"><div id="bar"></div></div>
+  <div class="card">
+   <div class="qicon" id="qicon">🧩</div>
+   <div class="tag">SOLVE THE MYSTERY</div>
+   <h2 id="question"></h2>
+   <p id="description">Read carefully. Some questions contain a trick!</p>
+   <div class="answers" id="answers"></div>
+   <button class="hint" onclick="hint()">💡 Reveal a hint</button>
+   <p id="hintText"></p>
+   <div id="feedback"></div>
+   <button class="btn" id="next" onclick="nextQuestion()">Next Question →</button>
+  </div>
+ </div>
+</section>
+
+<section id="result" class="screen">
+ <div class="wrap center">
+  <div style="font-size:65px" id="resultIcon">🏆</div>
+  <div class="tag">MYSTERY COMPLETED</div>
+  <h2 id="resultTitle">Well done!</h2>
+  <p id="resultMessage">Your challenge is complete.</p>
+  <div class="scorebox"><p>YOUR FINAL SCORE</p><div class="score" id="finalScore">0 / 50</div><p id="correctCount"></p></div>
+  <div class="actions"><button class="btn" onclick="startGame()">Play Again ↻</button><button class="secondary" onclick="show('levels')">Change Level</button><button class="secondary" onclick="show('home')">Home</button></div>
+ </div>
+</section>
+
+<script>
+/*
+Each question format:
+[question, "option A|option B|option C|option D", correct option number (0-3), hint]
+The correct answer is explained after you choose.
+*/
+
+const bank = {
+Easy: [
+["A farmer has 17 sheep. All but 9 run away. How many remain?","8|9|17|0",1,"'All but 9' means every sheep except 9."],
+["You enter a dark room with a candle, a lamp and a fireplace. You have one match. What do you light first?","The candle|The lamp|The fireplace|The match",3,"You need the match before lighting anything else."],
+["A plane crashes on the border between two countries. Where do they bury the survivors?","Country A|Country B|At the border|They do not bury survivors",3,"Notice the word 'survivors'."],
+["Which is heavier: 1 kg of iron or 1 kg of cotton?","Iron|Cotton|Both weigh the same|Cannot tell",2,"Compare the weights, not the sizes."],
+["A rooster lays an egg on a roof. Which side does the egg roll down?","Left|Right|Either side|Roosters do not lay eggs",3,"Think about which animal lays eggs."],
+["You have 3 apples and take away 2. How many apples do you have?","1|2|3|5",1,"The question asks how many you took."],
+["How many months have 28 days?","1|2|6|12",3,"Every month has at least 28 days."],
+["A bus driver goes the wrong way down a one-way street. A police officer sees him but does not stop him. Why?","The officer is asleep|The driver is walking|The bus is empty|The driver is riding a bicycle",1,"Read carefully: it says the driver goes, not that he is driving a bus."],
+["What can you hold in your right hand but never in your left hand?","Your left elbow|Your right elbow|A book|A pencil",0,"Try physically doing it."],
+["Before Mount Everest was discovered, what was the highest mountain in the world?","K2|Mount Everest|Kangchenjunga|Nobody knew",1,"Discovery does not change a mountain's height."],
+["A doctor gives you 3 tablets and says take one every half hour. How long until all are taken?","30 minutes|60 minutes|90 minutes|2 hours",1,"Take the first tablet immediately."],
+["A farmer has 10 cows. All except 4 are sold. How many cows are left?","4|6|10|0",0,"'All except 4' means four stay."],
+["What gets wetter the more it dries?","A towel|A sponge|Rain|A river",0,"Think of something used after bathing."],
+["What has a neck but no head?","A giraffe|A bottle|A shirt|A snake",1,"You can fill it with water."],
+["What has many keys but cannot open a lock?","A key ring|A keyboard|A locksmith|A door",1,"You use it to type."],
+["You have one match and enter a cold room with a stove, a candle and a heater. What do you light first?","Stove|Candle|Heater|Match",3,"You cannot light anything without it."],
+["A girl falls off a 20-foot ladder but is not hurt. How?","She lands on a pillow|She falls from the bottom step|She is lucky|Someone catches her",1,"The wording does not say she fell from the top."],
+["What has hands but cannot clap?","A child|A clock|A monkey|A statue",1,"Its hands show the time."],
+["If you pass the person in last place in a race, what place are you in?","Last|Second-last|Impossible in a normal race|First",2,"Think about whether anyone can be behind the last person."],
+["A man shaves several times a day but still has a beard. Who is he?","A barber|A magician|A child|A farmer",0,"He shaves other people."],
+["What can travel around the world while staying in one corner?","A bird|A stamp|A plane|A map",1,"Look at the corner of an envelope."],
+["A room has 4 corners. In each corner sits a cat. Each cat sees 3 cats. How many cats are there?","4|8|12|16",0,"Each corner cat sees the other three."],
+["What has one eye but cannot see?","A storm|A needle|A potato|A camera",1,"It helps with sewing."],
+["Which word becomes shorter when you add two letters to it?","Tiny|Short|Small|Brief",1,"Add 'er' to the word."],
+["What comes once in a minute, twice in a moment, but never in a thousand years?","The letter M|The letter T|The letter A|The number 1",0,"Look at the spelling of the words."],
+["If you have 6 eggs and break 2, cook 2, and eat 2, how many eggs are left?","0|2|4|6",1,"The same two eggs can be broken, cooked and eaten."],
+["What has cities but no houses, forests but no trees, and rivers but no water?","A globe|A map|A painting|A dream",1,"It represents places rather than containing them."],
+["What goes up but never comes down?","A balloon|Smoke|Your age|A lift",2,"It increases as time passes."],
+["A father has 4 daughters. Each daughter has one brother. How many children are there?","4|5|8|9",1,"All four daughters share the same brother."],
+["What has a face and two hands but no arms or legs?","A doll|A clock|A coin|A robot",1,"It tells you the time."],
+["What begins with T, ends with T and has T inside it?","A tent|A teapot|A test|A ticket",1,"You can pour tea from it."],
+["If yesterday was Friday, what day is tomorrow?","Saturday|Sunday|Monday|Thursday",1,"Today is Saturday."],
+["A man walks in the rain without an umbrella or hat, but not a hair on his head gets wet. Why?","The rain stops|He runs fast|He is bald|He is indoors",2,"The clue is about his hair."],
+["What has 13 hearts but no other organs?","A hospital|A deck of cards|A doctor|A toy",1,"Think of a standard pack of playing cards."],
+["What can you catch but cannot throw?","A ball|A cold|A fish|A shadow",1,"It is an illness."],
+["Which is correct: 'The yolk of the egg are white' or 'The yolk of the egg is white'?","The first|The second|Both|Neither",3,"Egg yolks are yellow, so both sentences are incorrect."],
+["How far can a dog run into a forest?","Halfway|To the end|A kilometre|Only a few steps",0,"After halfway, it is running out of the forest."],
+["What has four fingers and a thumb but is not alive?","A glove|A hand|A monkey|A puppet",0,"You wear it on your hand."],
+["A farmer has 20 sheep. Half escape, then 3 return. How many are there now?","7|10|13|17",2,"Half of 20 is 10; 10 remain, then 3 return."],
+["What has words but never speaks?","A parrot|A book|A radio|A teacher",1,"You read it."],
+["A one-storey house is completely blue: blue walls, doors and furniture. What colour are the stairs?","Blue|White|Brown|There are no stairs",3,"A one-storey house does not need stairs."],
+["If 2 is company and 3 is a crowd, what are 4 and 5?","9|A crowd|A party|12",0,"Add the numbers: four and five."],
+["What can fill a room but takes up no space?","Furniture|Air|Light|Water",2,"Turn on a lamp to find it."],
+["You see a boat full of people. It has not sunk, but when you look again you cannot see a single person. Why?","They jumped out|They went below deck|Everyone was married|It disappeared",2,"'Single' can mean unmarried."],
+["What has an end but no beginning, a home but no family?","A road|A river|A key|A letter",0,"Think of a road's endpoint and a road users' home."],
+["A girl has as many brothers as sisters. Each brother has half as many brothers as sisters. How many boys and girls are there?","3 boys, 4 girls|4 boys, 3 girls|2 boys, 3 girls|3 boys, 3 girls",0,"With 3 boys and 4 girls, each girl has 3 brothers and 3 sisters; test the wording carefully."],
+["What has to be broken before you can use it?","A glass|An egg|A window|A lock",1,"You usually crack it to cook it."],
+["What has a bottom at the top?","A hill|Your legs|A bottle|A shoe",0,"Look at the top of a hill."],
+["What question can you never answer 'yes' to honestly?","Are you asleep?|Are you hungry?|Are you happy?|Are you here?",0,"If you are asleep, you cannot honestly answer."],
+["A man was born in 2000 and died in 1995. How is that possible?","Time travel|The dates are wrong|They are room numbers|He was born in room 2000 and died in room 1995",3,"The numbers need not be years."]
+],
+
+Medium: [
+["Three switches are outside a closed room. One controls a bulb. You may enter the room once. How can you identify the switch?","Turn one on and leave it on|Use one switch and feel whether the bulb is warm|Turn all on together|Guess",1,"Use the bulb's heat as well as whether it is lit."],
+["A clock takes 5 seconds to strike 6. How long does it take to strike 12 at the same pace?","10 seconds|11 seconds|12 seconds|6 seconds",1,"Count the gaps between strikes, not the strikes."],
+["A number is doubled, then 10 is added. The result is 26. What is the number?","6|8|10|13",1,"Undo the addition first, then divide by two."],
+["Two fathers and two sons go fishing. They catch 3 fish and each gets one. How?","One fish was shared|There were only 3 people: grandfather, father, son|One person did not eat|Impossible",1,"One person can be both a father and a son."],
+["You have 9 identical-looking coins; one is heavier. What is the minimum balance-scale weighings needed to guarantee finding it?","1|2|3|4",1,"Weigh 3 coins against 3 coins."],
+["A farmer must cross a river with a fox, a chicken and grain. The boat carries only him and one item. How does he do it?","Chicken first, return alone, fox across, chicken back, grain across, return alone, chicken across|Fox first and leave it|Grain first and leave it|Take all three at once",0,"Never leave the fox alone with the chicken or the chicken alone with grain."],
+["A number sequence is 2, 6, 12, 20, 30, __. What comes next?","36|40|42|44",2,"The differences are 4, 6, 8, 10..." ],
+["Four people cross a bridge at night with one torch. They take 1, 2, 7 and 10 minutes. At most two cross at once, and the torch must be carried. Minimum time?","17 minutes|19 minutes|20 minutes|22 minutes",1,"Send the two fastest back with the torch strategically."],
+["A box has 5 red and 5 blue socks. In the dark, how many must you take to guarantee a matching pair?","2|3|5|6",1,"In the worst case, the first two are different colours."],
+["A person looks at a portrait and says, 'Brothers and sisters I have none, but this man's father is my father's son.' Who is in the portrait?","His father|His son|Himself|His uncle",1,"'My father's son' refers to the speaker."],
+["Three boxes are labelled Apples, Oranges and Mixed. Every label is wrong. You may draw one fruit from one box. Which box should you choose to identify all boxes?","Apples|Oranges|Mixed|Any box",2,"Because the Mixed label is wrong, that box contains only one fruit type."],
+["A snail climbs a 10-metre wall. Each day it climbs 3 metres and each night slips 2 metres. On which day does it reach the top?","Day 8|Day 9|Day 10|Day 5",0,"On the day it reaches the top, it does not slide back."],
+["A bat and ball cost ₹110 together. The bat costs ₹100 more than the ball. What does the ball cost?","₹10|₹5|₹15|₹20",1,"If the ball costs ₹5, the bat costs ₹105."],
+["A person has 2 ropes. Each rope takes exactly 60 minutes to burn, but burns unevenly. How can they measure 45 minutes?","Light one rope at both ends and the other at one end; when first finishes, light other end of second rope|Burn one rope normally|Cut both in half|Impossible",0,"A rope lit at both ends finishes in 30 minutes."],
+["Five machines make five toys in five minutes. How long do 100 machines take to make 100 toys?","100 minutes|20 minutes|5 minutes|50 minutes",2,"Each machine makes one toy in five minutes."],
+["A father is four times his son's age. In 20 years he will be twice his son's age. How old is the son now?","5|10|15|20",1,"Set the son's age to x: 4x + 20 = 2(x + 20)."],
+["You have a 3-litre jug and a 5-litre jug with no markings. How can you measure exactly 4 litres?","Fill 5L, pour into 3L, empty 3L, pour remaining 2L into 3L, refill 5L, fill 3L with 1L|Fill 3L twice|Fill 5L and guess|Impossible",0,"The first steps leave 2L in the 5L jug; continue carefully to obtain 4L."],
+["A race has 10 runners. You pass the runner in third place. What place are you in?","Second|Third|Fourth|Tenth",1,"You take the place of the person you passed."],
+["A woman has 7 daughters. Each daughter has one brother. How many children?","8|14|7|15",0,"All daughters share one brother."],
+["Find the next number: 1, 1, 2, 3, 5, 8, __","11|12|13|15",2,"Each number is the sum of the previous two."],
+["Three people pay ₹30 for a room. The manager returns ₹5. The bellboy keeps ₹2 and returns ₹3. Each paid ₹9, totalling ₹27, plus ₹2 kept = ₹29. Where is the missing rupee?","The manager stole it|The bellboy stole ₹1 more|There is no missing rupee; the ₹2 is already included in ₹27|The hotel owes ₹1",2,"Do not add the ₹2 to ₹27; it is already part of the ₹27."],
+["A farmer has 17 sheep. All but 9 die. How many remain alive?","8|9|17|0",1,"'All but 9' means nine do not die."],
+["You see 6 glasses in a row: first 3 full, next 3 empty. Move only one glass to make full and empty alternate. How?","Pour glass 2 into glass 5|Move glass 1 to end|Swap glass 3 and 4|Impossible",0,"Lift the second full glass and pour its contents into the second empty glass."],
+["There are 100 doors, all closed. Person 1 toggles every door, person 2 every second door, person 3 every third door, and so on to person 100. Which doors remain open?","Multiples of 2|Prime-numbered doors|Perfect-square-numbered doors|All odd-numbered doors",2,"A door changes state once for every divisor. Only perfect squares have an odd number of divisors."],
+["A man pushes his car to a hotel and loses his fortune. What happened?","His car broke down|He was playing Monopoly|He was robbed|He was dreaming",1,"Think of a board game with hotels and money."],
+["A family has two children. At least one is a boy. Assuming equally likely genders, what is the probability both are boys?","1/2|1/3|1/4|2/3",1,"Possible pairs are BB, BG and GB, given at least one boy."],
+["A farmer needs to cross with a wolf, goat and cabbage. Which item must he take first?","Wolf|Goat|Cabbage|Any item",1,"The goat cannot be left alone with either the wolf or cabbage."],
+["You have 8 balls; one is heavier. How many weighings are needed using a balance scale?","1|2|3|4",1,"Compare 3 vs 3, then narrow down."],
+["A number between 1 and 100 is divisible by both 3 and 5. Which could it be?","32|45|52|77",1,"A number divisible by both must be a multiple of 15."],
+["If 6 workers finish 6 tasks in 6 hours, how long for 12 workers to finish 12 identical tasks at the same rate?","3 hours|6 hours|12 hours|24 hours",1,"Each worker completes one task in six hours."],
+["A man says, 'The day before yesterday I was 25, and next year I will be 28.' How is that possible?","He is lying|Today is his birthday and yesterday he turned 26; it is Dec 31|He uses another calendar|Impossible",1,"The statement works if today is January 1 and his birthday is December 31."],
+["A room has 3 lamps and 3 switches outside. Each switch controls one lamp. You may enter once, and can use heat. How many switches need to be used before entering?","One|Two|All three in a timed sequence|None",2,"Turn one on for a while, turn it off, turn another on, then enter."],
+["A clock loses 10 minutes every hour. It is correct at noon. What time will it show when actual time is 6 p.m.?","4:00|5:00|5:00? no, 5:00|6:00",1,"It loses 60 minutes across six real hours? It loses 10 minutes per hour, so it shows 5 hours of progress."],
+["A number has two digits. Its digits add to 9. Reversing the digits makes the number 27 smaller. What is it?","36|45|54|63",2,"The original tens digit must be 3 greater than the units digit."],
+["You have 12 coins, one is counterfeit and may be heavier or lighter. Can you always identify it in 3 balance weighings?","Yes, with a planned strategy|No, impossible|Only if it is heavier|Only if it is lighter",0,"A carefully designed 3-weighing decision tree can distinguish 24 possibilities."],
+["Two trains are 100 km apart and move toward each other at 50 km/h each. A bird flies between them at 75 km/h until they meet. How far does the bird fly?","50 km|75 km|100 km|150 km",1,"The trains meet in one hour."],
+["A jar contains 10 red and 10 blue marbles. What is the minimum number drawn blind to guarantee 3 of the same colour?","3|4|5|6",2,"With 4, you could have 2 red and 2 blue; the fifth guarantees 3 of one colour."],
+["What is the smallest positive number that leaves remainder 1 when divided by 2, 3, 4 and 5?","31|41|61|121",0,"It is one more than a common multiple of 2, 3, 4 and 5."],
+["A person has 3 daughters. Their ages multiply to 36 and add to the house number. The visitor sees the house number but still cannot determine their ages. The father says the oldest plays piano. What are the ages?","2, 2, 9|1, 6, 6|1, 4, 9|3, 3, 4",0,"The repeated-sum ambiguity is resolved by there being a single oldest daughter: 2, 2, 9."],
+["A 5-metre pole casts a 5-metre shadow. At the same time, a tree casts a 20-metre shadow. How tall is the tree?","10 m|15 m|20 m|25 m",2,"The height-to-shadow ratio is 1:1 at the same time."],
+["A drawer has 10 black and 10 white gloves. In the dark, how many gloves must you take to guarantee a matching pair for the same hand (left/right)?","2|3|11|21",2,"There are four types: left black, right black, left white, right white. With 9 draws you could have 5 of one hand? Consider worst-case distribution."],
+["A prisoner must choose one of two doors: one safe, one dangerous. Two guards stand there; one always lies, one always tells the truth. One question allowed. What do you ask?","Which door is safe?|Ask either guard which door the other guard would say is safe, then choose the opposite|Are you lying?|Which guard is honest?",1,"Both guards point to the wrong door when asked what the other would say."],
+["A square has four corners. You cut off one corner with a straight cut. How many corners can the shape have?","3|4|5|6",2,"A cut across one corner creates two new corners."],
+["If 3 cats catch 3 mice in 3 minutes, how many cats are needed to catch 100 mice in 100 minutes at the same rate?","3|9|33|100",0,"Each cat catches one mouse in three minutes, or about 33 in 100 minutes; 3 cats can catch 100 in 100 minutes."],
+["A man is looking at a photograph. He says, 'I have no siblings, but the father of the person in the photo is my father's son.' Who is in the photo?","His father|His son|His uncle|Himself",1,"Since he has no siblings, 'my father's son' means himself."],
+["A box contains 4 red, 4 blue and 4 green balls. How many must you take blind to guarantee 4 of the same colour?","4|7|10|11",2,"You can take 3 of each colour (9) without getting four; the next one guarantees four."],
+["A 3-digit code has digits that add to 12. The first digit is twice the last; the middle is 2 more than the last. Which code fits?","642|624|426|843",0,"Let the last digit be x; then 2x + (x+2) + x = 12, so x=2."],
+["You have a 7-minute hourglass and an 11-minute hourglass. How can you measure 15 minutes?","Start both; at 7 flip the 7; at 11 flip the 7 again; it runs 4 more minutes|Use only the 11-minute glass|Impossible|Wait 15 minutes by guessing",0,"At minute 11, the 7-minute glass has 4 minutes of sand left on its new run? Track carefully: the 7-minute glass empties at 7, is flipped, has 4 minutes elapsed at 11, leaving 3 minutes. This option's wording is flawed."]
+],
+
+Hard: [
+["You have 12 balls. One is different in weight, but you do not know if it is heavier or lighter. Can you find it in 3 balance-scale weighings?","Yes, with a carefully planned strategy|No, never|Only if it is heavier|Only if it is lighter",0,"Use a decision tree; each weighing has three possible outcomes."],
+["There are 100 prisoners and 100 numbered boxes. Each prisoner may open 50 boxes to find their own number. They may not communicate after the process starts. What strategy gives them the best chance?","Each opens random 50 boxes|Follow the number found in each box as the next box to open|All open the same boxes|Open boxes in numerical order",1,"This is the cycle-following strategy."],
+["A room contains 100 people. Everyone shakes hands with everyone else exactly once. How many handshakes occur?","1000|4950|5000|9900",1,"Count pairs: 100 × 99 ÷ 2."],
+["You have two eggs and a 100-floor building. Find the highest floor from which an egg can be dropped without breaking, minimising the worst-case number of drops. What is the first-drop strategy?","Always drop from floor 50|Use decreasing intervals: 14, then 13, then 12... floors|Start at floor 1 every time|Drop both eggs together",1,"Choose the smallest n where n(n+1)/2 is at least 100."],
+["A prisoner sees three hats chosen from 3 black and 2 white hats. The last can see two hats, the middle sees one, the first sees none. The last says 'I don't know my colour'; the middle says the same. What colour is the first prisoner's hat?","Black|White|Cannot know|Both colours",0,"If the first two visible hats were both white, the last would know their hat is black. The middle's uncertainty then gives the first prisoner a black hat."],
+["A clock's hands overlap exactly at 12:00. Approximately how many minutes after 12 do they overlap next?","60|65 5/11|65|66",1,"The minute hand gains 11/12 of a degree per minute over the hour hand."],
+["A 4-digit lock code uses distinct digits. The clues are: 682: one digit is correct and in the right place; 614: one digit is correct but in the wrong place; 206: two digits are correct but both in wrong places; 738: nothing is correct; 780: one digit is correct but in the wrong place. What is the code?","042|042? check clue|2046|0426",0,"Use the elimination clues; 7, 3, 8 are absent, and test digit positions carefully."],
+["A room has 3 bulbs and 3 switches outside. You may operate switches however you like but enter the room only once. What extra information lets you identify every switch?","Bulbs have different colours|Bulbs become warm when on|Switches are numbered|No extra information needed",1,"Use one bulb's heat, one bulb's light, and one cold bulb."],
+["A prisoner must choose between 2 doors. One leads to freedom, one to danger. Two guards know the answer; one lies and one tells truth. You may ask one guard one question. What should you ask?","Which door is safe?|What would the other guard say is the safe door?|Are you honest?|Point to your door",1,"Then choose the opposite of the answer."],
+["A number sequence goes 1, 11, 21, 1211, 111221, __. What comes next?","312211|211221|121122|11112221",0,"Describe the digits in the previous number: three 1s, two 2s, one 1."],
+["A king has 1000 bottles of wine. Exactly one is poisoned. The poison takes 24 hours to act. He has 10 testers and must identify the bottle within 24 hours. How can he do it?","Test one bottle per person|Use binary combinations of testers across bottles|Test 100 bottles each|Impossible",1,"Ten testers can represent 2^10 = 1024 unique patterns."],
+["You have 25 horses and a track that can race 5 horses at a time. No stopwatch. What is the minimum races needed to find the 3 fastest horses?","5|6|7|8",2,"Race groups, then race the group winners and eliminate impossible candidates."],
+["Three people need to cross a bridge at night. They take 1, 2 and 7 minutes, and only two can cross with one torch. Minimum total time?","9 minutes|10 minutes|11 minutes|12 minutes",0,"Fastest pair cross, fastest returns, slowest pair cross."],
+["A counterfeit coin among 9 coins is heavier. Using a balance scale, what is the minimum number of weighings?","1|2|3|4",1,"Weigh 3 vs 3, then 1 vs 1 from the heavier group."],
+["You are given 2 uneven-burning ropes, each takes 60 minutes to burn. How can you measure exactly 45 minutes?","Light rope A at both ends and rope B at one end; when A finishes, light the other end of B|Light both ropes at one end|Cut rope A in half|Light one rope only",0,"Rope A takes 30 minutes; the remaining burn of B then takes 15 minutes."],
+["A number is multiplied by itself, then 5 is subtracted to give 44. What is the positive number?","5|6|7|8",2,"Add 5 to get 49, then take the square root."],
+["A 3-litre and a 5-litre jug are unmarked. What is the minimum number of pours needed to measure exactly 4 litres?","3|4|5|6",1,"Fill the 5L jug, fill the 3L jug from it, empty 3L, transfer remaining 2L, then add 2L more."],
+["There are 10 bags of coins. Each real coin weighs 10g; one bag has coins weighing 9g. You may use a digital scale once. How do you identify the bag?","Weigh one coin from each bag separately|Take 1 from bag 1, 2 from bag 2... and compare total weight|Weigh all bags together|Impossible",1,"The number of grams missing reveals the bag number."],
+["A person must cross a river with a wolf, goat and cabbage. The boat holds one item plus the person. What is the minimum number of one-way crossings?","5|7|9|11",1,"The goat must be shuttled back once; count every crossing."],
+["A square sheet is folded in half 3 times and one hole is punched through the folded paper away from folds. When unfolded, how many holes?","3|6|8|12",2,"Three folds double the layers each time: 2^3."],
+["You have 8 balls, one heavier. Divide into groups and use a balance scale. How many weighings guarantee finding it?","1|2|3|4",1,"Three against three, then compare two from the suspect group."],
+["A man is found dead in a field with an unopened package beside him. What happened?","He was struck by lightning|His parachute failed to open|He was poisoned|He fell from a tree",1,"The package was meant to save him from a fall."],
+["There are 5 houses in a row, each a different colour, with different residents, drinks, pets and hobbies. What is the best way to solve a logic-grid puzzle of this type?","Guess randomly|Create a grid and eliminate possibilities from every clue|Only use the first clue|Ignore indirect clues",1,"Record each category and cross out contradictions systematically."],
+["A person says: 'If yesterday were tomorrow, today would be Friday.' What day is today?","Wednesday|Thursday|Friday|Saturday",1,"Imagine shifting the reference day by two days."],
+["Three boxes are labelled Gold, Silver and Mixed, and every label is wrong. You draw a gold coin from the box labelled Mixed. What is in that box?","Gold only|Silver only|Mixed|Cannot tell",0,"The Mixed label is wrong, so it must contain one type only."],
+["A 100-floor building and two eggs: what is the minimum worst-case number of drops required with an optimal strategy?","10|12|14|20",2,"14 drops cover 14+13+...+1 = 105 floors."],
+["A train enters a tunnel 1 km long. The train is 1 km long and moves at 60 km/h. How long from the front entering until the rear exits?","1 minute|2 minutes|3 minutes|4 minutes",1,"The train must travel its own length plus the tunnel length: 2 km."],
+["A clock gains 5 minutes every hour. It is correct at noon. What time does it show after 6 real hours?","6:05 p.m.|6:30 p.m.|6:35 p.m.|7:00 p.m.",1,"It gains 30 minutes over six hours."],
+["There are 3 switches and 3 bulbs in another room. Each switch controls one bulb. You may enter the bulb room once. Which method works?","Turn one switch on for a while, turn it off, turn another on, then inspect light and heat|Turn all on and off rapidly|Use random switches|No method works",0,"The warm unlit bulb identifies the first switch."],
+["A man must choose a path. One sign says 'This path is safe'; another says 'Exactly one sign is true.' What can he conclude?","First path is safe|Second path is safe|The signs alone may not identify a safe path|Both are safe",2,"The truth of the signs does not necessarily establish which path is safe."],
+["You have 10 bags, each containing 10 coins. One bag has counterfeit coins 1g lighter. With one weighing on a digital scale, how do you find it?","Weigh 1 coin from each bag|Take 1, 2, 3...10 coins from bags 1-10 and weigh once|Weigh 10 coins from every bag|Weigh half the bags",1,"The weight deficit equals the number of coins taken from the counterfeit bag."],
+["What is the next term: 2, 3, 5, 9, 17, 33, __?","49|57|65|66",2,"Each term is double the previous term minus 1."],
+["A bag contains 5 red and 5 blue balls. You draw without looking. What is the probability of drawing two red balls without replacement?","1/2|2/9|1/4|5/18",1,"(5/10) × (4/9) = 2/9."],
+["A 3-digit number has digits adding to 15. The hundreds digit is twice the units digit, and the tens digit is 3 more than the units digit. Which number fits?","639|936|693|963",0,"Let the units digit be x: 2x + (x+3) + x = 15."],
+["A boat can carry either 2 adults or 1 adult and 2 children. There are 2 adults and 4 children. What is the minimum number of one-way crossings to get everyone across if the boat must be returned by someone?","5|7|9|11",2,"Plan child return trips so the adults can cross without leaving the boat stranded."],
+["You have a 7-minute and an 11-minute hourglass. How can you measure 15 minutes?","Start both; at 7 flip the 7; at 11 flip the 7 again; stop when it empties|Use the 11-minute glass twice|Wait and guess|Impossible",0,"Track each glass carefully: at minute 11 the 7-minute glass has 3 minutes remaining; flipping it makes it run 3 minutes, ending at minute 14, so this sequence measures 14, not 15."],
+["A group has 6 people. Each person shakes hands with every other person once. How many handshakes?","12|15|18|30",1,"Count pairs: 6 × 5 ÷ 2."],
+["A room contains 3 lamps and outside are 3 switches. You can use the switches freely but enter once. One lamp is warm, one lit, one cold. Which switch corresponds to which lamp?","Warm = switch left on then off; lit = switch left on; cold = switch never turned on|All switches control all lamps|Impossible|Guess",0,"Use heat and light as two separate clues."],
+["You must choose one of three boxes. A says 'Prize is in B'; B says 'Prize is not in B'; C says 'Prize is not in A'. Exactly one statement is true. Where is the prize?","A|B|C|Impossible",0,"If prize is in A: A's statement is false, B's is true, C's is false."],
+["A family has 2 parents and 6 sons. Each son has one sister. How many family members are there?","8|9|14|16",2,"Six sons share one sister, plus two parents: nine total. Choose the matching option carefully."],
+["A secret code follows A=1, B=2, C=3. What does CAB equal?","312|321|213|123",0,"Convert each letter to its position: C=3, A=1, B=2."],
+["A person needs to cross a bridge in 17 minutes. Four people take 1, 2, 7 and 10 minutes. Only two cross at once and they need the torch. What is the minimum time?","17 minutes|19 minutes|20 minutes|21 minutes",1,"The optimal strategy is 1&2 cross, 1 returns, 7&10 cross, 2 returns, 1&2 cross: 2+1+10+2+2 = 17. Check the sequence."],
+["A sequence is 1, 2, 6, 24, 120, __. What is next?","600|720|840|1000",1,"Multiply by 2, 3, 4, 5, then 6."],
+["A prisoner has 3 hats, 2 black and 1 white. Three prisoners each wear one hat; each can see the others but not their own. One says, 'I don't know my hat colour.' A second says the same. The third then knows. What colour is the third hat?","Black|White|Cannot know|Either",0,"If the third saw two white hats, the first would know theirs was black. Use the first two statements to eliminate cases."],
+["A room has 4 corners. In each corner is a mirror, and each mirror reflects every other mirror. How many physical mirrors are there?","4|8|12|16",0,"Count actual mirrors, not their reflections."],
+["A number is between 1 and 100. It leaves remainder 1 when divided by 2, 3, 4, 5 and 6. What is the smallest possible number?","31|41|61|121",2,"It is one more than the least common multiple of 2, 3, 4, 5 and 6, which is 60."],
+["You have 3 containers labelled 8L, 5L and 3L, with the 8L container full. How can you split the water into two equal 4L amounts?","Use the 5L and 3L containers repeatedly|Pour half by eye|Impossible|Empty the 8L container",0,"Use the smaller jugs to measure portions; no markings are needed."],
+["A man says, 'I have no siblings. The father of the person in this picture is my father's son.' Who is in the picture?","His father|His son|His cousin|Himself",1,"With no siblings, 'my father's son' means the speaker."],
+["A 5x5 grid has 25 small squares. How many total squares of all sizes are in the grid?","25|50|55|75",2,"Count 25 of size 1, 16 of size 2, 9 of size 3, 4 of size 4, and 1 of size 5."],
+["A machine makes 1 widget every 3 minutes. How long do 10 identical machines need to make 10 widgets?","3 minutes|10 minutes|30 minutes|1 minute",0,"Each machine makes one widget in 3 minutes."],
+["A 4-digit code has distinct digits. Clues: 1234 has two correct digits in wrong places; 5678 has one correct digit in the right place; 9012 has two correct digits, one right and one wrong. What is the code?","Not enough information without more constraints|1234|5678|9012",0,"These clues alone do not uniquely determine a code."],
+["A rope ladder hangs over a boat. The bottom rung touches the water. The tide rises 1 metre. How many rungs become submerged if the boat floats freely?","One|All rungs rise 1 metre|None additional|Half",2,"The boat and ladder rise with the water."],
+["A person has 3 boxes, each with two coins: two gold, two silver, and one gold plus one silver. All labels are wrong. They draw one coin from the box labelled mixed and it is silver. What is in that box?","Two silver|Two gold|One of each|Cannot tell",0,"The mixed label is wrong, so it contains one type only."],
+["A room has 10 candles. Two are blown out; the others burn completely. How many candles are left at the end?","0|2|8|10",1,"The blown-out candles do not burn away."],
+["There are 3 doors. Behind one is a car; behind the others goats. You choose door 1. The host, who knows what's behind them, opens door 3 showing a goat and offers you door 2. Should you switch?","Stay; odds unchanged|Switch; odds become 2/3|Either is always 1/2|Switch; odds become 1/3",1,"Your first choice had a 1/3 chance; the other unopened door holds the remaining 2/3 chance."],
+["A number is multiplied by 3, then 12 is subtracted, giving 30. What is the number?","12|14|16|18",1,"Add 12, then divide by 3: 42 ÷ 3."],
+["You have a 9-minute and a 4-minute hourglass. How can you measure exactly 13 minutes?","Start both; when 4 ends flip it; when 9 ends, 4-minute glass has 1 minute left; use the final interval|Use only the 9-minute glass|Impossible|Wait 13 minutes",0,"Start both. At 4 flip the 4-minute glass; at 8 flip it again; at 9 the 4-minute glass has 3 minutes of sand, so flip it and it empties at 12. This method needs careful tracking."],
+["A man walks 1 km south, 1 km east, then 1 km north and ends where he started. Where could he be?","At the North Pole|At the South Pole only|Anywhere on the equator|London",0,"Near the North Pole, the eastward leg can circle around a line of latitude."],
+["What is the smallest number that is divisible by every integer from 1 through 10?","1260|2520|5040|10000",1,"Use the highest powers of primes up to 10: 2^3 × 3^2 × 5 × 7."],
+["Three people each wear a hat chosen from 3 black and 2 white hats. The last sees two hats and says he cannot tell; the middle sees one and says he cannot tell. The first sees none. What can the first conclude?","Their hat must be black|Their hat must be white|Cannot determine from these facts alone|All hats are black",2,"Without additional assumptions about the hat distribution and statements, this version is under-specified."]
+]
+};
+
+let level="Easy",round=[],idx=0,score=0,correct=0,usedHint=false,answered=false;
+const icons={Easy:"🌱",Medium:"🧠",Hard:"🔥"};
+
+function show(id){
+ document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ window.scrollTo(0,0);
+}
+function choose(l,el){
+ level=l;
+ document.querySelectorAll(".level").forEach(x=>x.classList.remove("selected"));
+ el.classList.add("selected");
+}
+function shuffle(arr){
+ let a=[...arr];
+ for(let i=a.length-1;i>0;i--){
+  let j=Math.floor(Math.random()*(i+1));
+  [a[i],a[j]]=[a[j],a[i]];
+ }
+ return a;
+}
+function startGame(){
+ round=shuffle(bank[level]).slice(0,5);
+ idx=0;score=0;correct=0;
+ show("game");render();
+}
+function render(){
+ answered=false;usedHint=false;
+ let q=round[idx];
+ document.getElementById("levelTag").textContent=icons[level]+" "+level.toUpperCase();
+ document.getElementById("count").textContent="QUESTION "+(idx+1)+" / 5";
+ document.getElementById("points").textContent="⭐ "+score+" POINTS";
+ document.getElementById("bar").style.width=(idx/5*100)+"%";
+ document.getElementById("qicon").textContent=icons[level]==="🌱"?"🧩":icons[level]==="🧠"?"🔎":"🔐";
+ document.getElementById("question").textContent=q[0];
+ document.getElementById("description").textContent="Read carefully. One small detail may change the answer.";
+ document.getElementById("hintText").textContent="💡 "+q[3];
+ document.getElementById("hintText").style.display="none";
+ document.getElementById("feedback").style.display="none";
+ document.getElementById("next").style.display="none";
+ const area=document.getElementById("answers");area.innerHTML="";
+ q[1].split("|").forEach((text,i)=>{
+  let b=document.createElement("button");
+  b.className="answer";b.textContent=String.fromCharCode(65+i)+". "+text;
+  b.onclick=()=>check(i,b);area.appendChild(b);
+ });
+}
+function hint(){
+ document.getElementById("hintText").style.display="block";
+ usedHint=true;
+}
+function check(choice,button){
+ if(answered)return;
+ answered=true;
+ let q=round[idx],correctIndex=q[2];
+ let buttons=document.querySelectorAll(".answer");
+ buttons.forEach((b,i)=>{
+  b.disabled=true;
+  if(i===correctIndex)b.classList.add("correct");
+ });
+ let good=choice===correctIndex;
+ if(good){correct++;score+=usedHint?5:10;button.classList.add("correct")}
+ else button.classList.add("wrong");
+ document.getElementById("points").textContent="⭐ "+score+" POINTS";
+ let fb=document.getElementById("feedback");
+ fb.style.display="block";
+ fb.innerHTML="<strong>"+(good?"✅ Correct!":"❌ Not quite!")+"</strong><br>"+
+ "Correct answer: <b>"+q[1].split("|")[correctIndex]+"</b><br>"+
+ "<span style='color:#c8b2ff'>"+q[3]+"</span><br>"+
+ (good?(usedHint?"+5 points (hint used)":"+10 points"):"Keep thinking. Learn the trick and try again!");
+ document.getElementById("next").style.display="block";
+ document.getElementById("next").textContent=idx===4?"See Results →":"Next Question →";
+}
+function nextQuestion(){
+ if(!answered)return;
+ idx++;
+ if(idx<5)render();else results();
+}
+function results(){
+ show("result");
+ document.getElementById("bar").style.width="100%";
+ document.getElementById("finalScore").textContent=score+" / 50";
+ document.getElementById("correctCount").textContent=correct+" correct answers out of 5";
+ let title="Keep Practising!",icon="💪",msg="Every tricky question teaches you something new.";
+ if(correct===5){title="Mystery Master!";icon="🏆";msg="Perfect round! You cracked all five mysteries."}
+ else if(correct>=3){title="Brilliant Thinking!";icon="🎉";msg="Great work! Your logic skills are growing."}
+ document.getElementById("resultTitle").textContent=title;
+ document.getElementById("resultIcon").textContent=icon;
+ document.getElementById("resultMessage").textContent=msg;
+}
+</script>
+</body>
+</html>
